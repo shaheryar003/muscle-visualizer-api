@@ -108,6 +108,12 @@ GET /v1/muscles
 ```
 Retrieve all available muscle groups for visualization.
 
+## 📖 Documentation
+
+- **[User Guide](./USER_GUIDE.md)**: How to set up and use the application (Local & Docker).
+- **[Backend API Docs](./backend/BACKEND_DOCS.md)**: Detailed technical documentation for the backend endpoints.
+- **Interactive API Docs**: [http://localhost:8000/docs](http://localhost:8000/docs) (when running locally).
+
 ## 💡 Use Cases
 
 - **Fitness Apps** - Show users which muscles they're targeting
@@ -116,12 +122,6 @@ Retrieve all available muscle groups for visualization.
 - **Physical Therapy** - Track rehabilitation progress
 - **Education** - Teach anatomy and muscle groups
 - **Health Tracking** - Monitor muscle development over time
-
-## 📖 Documentation
-
-- **Interactive API Docs**: [API Documentation](https://muscle-visualizer.exercisedb.dev/docs)
-- **OpenAPI Specification**: Available at `/swagger` endpoint
-- **LLM-friendly Documentation**: Available at `/llms.txt` endpoint
 
 ## 🔗 Related Projects
 
