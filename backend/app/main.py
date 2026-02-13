@@ -2,6 +2,8 @@ from fastapi import FastAPI, UploadFile, File, Response, Path, Query
 from fastapi.middleware.cors import CORSMiddleware
 from app.services.rapid_api_service import call_rapid_api
 from app.config import RAPID_API_KEY, RAPID_API_HOST, EDB_API_KEY, EDB_API_HOST
+from fastapi.staticfiles import StaticFiles
+import os
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -153,6 +155,13 @@ async def get_exercise_details(exercise_id: str):
     response = await call_rapid_api(f"/api/v1/exercises/{exercise_id}", host=EDB_API_HOST, key=EDB_API_KEY)
     return response.json()
 
+# Serve static files from the 'static' directory
+# In Docker, we will copy the frontend build to /backend/static
+static_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "static")
+if os.path.exists(static_dir):
+    app.mount("/", StaticFiles(directory=static_dir, html=True), name="static")
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=False)
