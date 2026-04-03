@@ -1,8 +1,7 @@
-from fastapi import FastAPI, UploadFile, File, Response, Path, Query
+from fastapi import FastAPI, Response, Query
 from fastapi.middleware.cors import CORSMiddleware
 from app.services.rapid_api_service import call_rapid_api
 from app.config import RAPID_API_KEY, RAPID_API_HOST, EDB_API_KEY, EDB_API_HOST
-from fastapi.staticfiles import StaticFiles
 import os
 import logging
 
@@ -15,16 +14,11 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# CORS Middleware
-origins = [
-    "http://localhost:5173",  # React default port
-    "http://127.0.0.1:5173",
-]
-
+# CORS Middleware — allow all origins for public API
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -154,12 +148,6 @@ async def get_exercise_details(exercise_id: str):
     """
     response = await call_rapid_api(f"/api/v1/exercises/{exercise_id}", host=EDB_API_HOST, key=EDB_API_KEY)
     return response.json()
-
-# Serve static files from the 'static' directory
-# In Docker, we will copy the frontend build to /backend/static
-static_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "static")
-if os.path.exists(static_dir):
-    app.mount("/", StaticFiles(directory=static_dir, html=True), name="static")
 
 if __name__ == "__main__":
     import uvicorn
